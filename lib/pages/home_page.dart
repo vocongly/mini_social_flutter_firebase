@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mini_social/components/my_drawer.dart';
 import 'package:flutter_mini_social/components/my_post_button.dart';
 import 'package:flutter_mini_social/components/my_textfield.dart';
+import 'package:flutter_mini_social/components/post_item.dart';
 import 'package:flutter_mini_social/databases/firebase_database.dart';
+
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -33,7 +35,7 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
@@ -49,32 +51,32 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          StreamBuilder(
-              stream: firebase.getPostsStream(),
-              builder: ((context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final posts = snapshot.data!.docs;
-                if (snapshot.data == null || posts.isEmpty) {
-                  return const Center(
-                    child: Text('No posts! Say something'),
-                  );
-                }
-                return Expanded(
-                  child: ListView.builder(
-                      itemCount: posts.length,
-                      itemBuilder: (context, index) {
-                        final post = posts[index];
-                        return ListTile(
-                          title: Text(post['Message']),
-                          subtitle: Text(post['UserEmail']),
-                        );
-                      }),
-                );
-              }))
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: StreamBuilder(
+                  stream: firebase.getPostsStream(),
+                  builder: ((context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final posts = snapshot.data!.docs;
+                    if (snapshot.data == null || posts.isEmpty) {
+                      return const Center(
+                        child: Text('No posts! Say something'),
+                      );
+                    }
+                    return ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return PostItem(post: post);
+                        });
+                  })),
+            ),
+          )
         ],
       ),
     );

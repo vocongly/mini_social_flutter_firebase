@@ -27,22 +27,38 @@ class _SettingPageState extends State<SettingPage> {
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Ligh Mode/Dark Mode'),
-                IconButton(
-                    onPressed: () {
-                     Provider.of<ThemeProvider>(context,listen: false).toggleTheme();
-                      print('change themedata');
-                    },
-                    icon: const Icon(Icons.swap_vert_circle_sharp))
-              ],
+            Container(
+              margin: EdgeInsets.only(bottom: 16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Ligh Mode/Dark Mode'),
+                      IconButton(
+                          onPressed: () {
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .toggleTheme();
+                          },
+                          icon: const Icon(Icons.swap_vert_circle_sharp))
+                    ],
+                  ),
+                  Divider(
+                    height: 2,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ],
+              ),
             ),
-            Divider(
-              height: 2,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            )
+            GestureDetector(
+              onTap: () {},
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Ligh Mode/Dark Mode'),
+                ],
+              ),
+            ),
           ],
         ),
       ),

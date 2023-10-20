@@ -43,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.secondary,
                           borderRadius: BorderRadius.circular(24)),
                       child: const Icon(
                         Icons.person,
