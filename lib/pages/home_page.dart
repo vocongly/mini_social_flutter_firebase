@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mini_social/components/my_drawer.dart';
 import 'package:flutter_mini_social/components/my_post_button.dart';
@@ -10,6 +11,8 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final FirebaseDatabase firebase = FirebaseDatabase();
+
+  final User? currentUser = FirebaseAuth.instance.currentUser;
 
   final TextEditingController postController = TextEditingController();
 
@@ -52,30 +55,31 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: StreamBuilder(
-                  stream: firebase.getPostsStream(),
-                  builder: ((context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    final posts = snapshot.data!.docs;
-                    if (snapshot.data == null || posts.isEmpty) {
-                      return const Center(
-                        child: Text('No posts! Say something'),
-                      );
-                    }
-                    return ListView.builder(
-                        itemCount: posts.length,
-                        itemBuilder: (context, index) {
-                          final post = posts[index];
+            child: StreamBuilder(
+                stream: firebase.getPostsStream(),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final posts = snapshot.data!.docs;
+                  if (snapshot.data == null || posts.isEmpty) {
+                    return const Center(
+                      child: Text('No posts! Say something'),
+                    );
+                  }
+                  return ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        final post = posts[index];
+                        if(post['UserEmail'] != currentUser!.email) {
                           return PostItem(post: post);
-                        });
-                  })),
-            ),
+                        }else{
+                          return const SizedBox.shrink();
+                        }
+                      });
+                })),
           )
         ],
       ),

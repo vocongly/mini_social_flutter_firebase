@@ -13,9 +13,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController(text: 'ly@gmail.com');
+  final TextEditingController emailController =
+      TextEditingController(text: 'ly@gmail.com');
 
-  final TextEditingController passwordController = TextEditingController(text: '123456');
+  final TextEditingController passwordController =
+      TextEditingController(text: '123456');
 
   void login() async {
     showDialog(
@@ -29,11 +31,19 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
-      Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      showMessageToUser(e.code, context);
+      if (context.mounted) {
+        Navigator.pop(context);
+        showMessageToUser(e.code, context);
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

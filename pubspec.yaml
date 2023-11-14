@@ -45,10 +45,24 @@ dependencies:
   firebase_core: ^2.17.0
   firebase_auth: ^4.10.1
   cloud_firestore: ^4.9.3
+  firebase_storage: ^11.3.1
   get: ^4.6.6
   provider: ^6.0.5
   intl: ^0.18.1
   shared_preferences: ^2.2.2
+  image_picker: ^1.0.4
+  permission_handler: ^11.0.1
+  flutter_sound: ^9.2.13
+  cached_network_image: ^3.3.0
+  record: ^4.4.4
+  audioplayers: ^4.1.0
+  audio_waveforms: ^1.0.4
+  audio_wave_url_package: ^1.0.34
+  flutter_link_previewer: ^3.2.2
+  link_preview_generator: ^1.2.0
+
+  timelines: ^0.1.0
+  flutter_chat_types: ^3.6.2
 
 dev_dependencies:
   flutter_test:
@@ -73,9 +87,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

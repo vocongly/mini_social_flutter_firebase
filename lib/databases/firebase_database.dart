@@ -28,6 +28,16 @@ class FirebaseDatabase {
     return postStream;
   }
 
+  Stream<QuerySnapshot> getPostsByUserEmail(String userEmail){
+    final postStream = FirebaseFirestore.instance
+        .collection('Posts')
+        .where('UserEmail',isEqualTo: userEmail)
+        .orderBy('Timestamp', descending: true)
+        .snapshots();
+
+    return postStream;
+  }
+
   Future<void> sendMessage(String message, String receiverEmail) async {
     final String senderEmail = user!.email.toString();
     final Timestamp timestamp = Timestamp.now();
@@ -36,13 +46,50 @@ class FirebaseDatabase {
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         message: message,
-        timestamp: timestamp);
+        timestamp: timestamp,
+        messageType: MessageType.string);
 
     List<String> ids = [senderEmail, receiverEmail];
     ids.sort();
     String chatRoomId = ids.join('_');
 
     await chats.doc(chatRoomId).collection('Messages').add(newMessage.toMap());
+  }
+
+  Future<void> sendImage(String url, String receiverEmail) async {
+    final String senderEmail = user!.email.toString();
+    final Timestamp timestamp = Timestamp.now();
+
+    Message newMessageImage = Message(
+        senderEmail: senderEmail,
+        receiverEmail: receiverEmail,
+        timestamp: timestamp,
+        message: url,
+        messageType: MessageType.image);
+
+    List<String> ids = [senderEmail, receiverEmail];
+    ids.sort();
+    String chatRoomId = ids.join('_');
+
+    await chats.doc(chatRoomId).collection('Messages').add(newMessageImage.toMap());
+  }
+
+  Future<void> sendAudio(String url, String receiverEmail) async {
+    final String senderEmail = user!.email.toString();
+    final Timestamp timestamp = Timestamp.now();
+
+    Message newMessageImage = Message(
+        senderEmail: senderEmail,
+        receiverEmail: receiverEmail,
+        timestamp: timestamp,
+        message: url,
+        messageType: MessageType.audio);
+
+    List<String> ids = [senderEmail, receiverEmail];
+    ids.sort();
+    String chatRoomId = ids.join('_');
+
+    await chats.doc(chatRoomId).collection('Messages').add(newMessageImage.toMap());
   }
 
   Stream<QuerySnapshot> getMessages(String userEmail, String otherUserEmail) {
