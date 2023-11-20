@@ -251,11 +251,11 @@ class _ChatComponnentState extends State<ChatComponnent> {
                     }
                   },
                   icon: Icon(isRecording ? Icons.stop : Icons.mic)),
-              IconButton(
-                  onPressed: () async {
-                    await playRecording();
-                  },
-                  icon: const Icon(Icons.play_arrow)),
+              // IconButton(
+              //     onPressed: () async {
+              //       await playRecording();
+              //     },
+              //     icon: const Icon(Icons.play_arrow)),
             ],
           ),
         ),

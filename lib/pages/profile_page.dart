@@ -91,6 +91,7 @@ class ProfilePage extends StatelessWidget {
                     return Center(
                       child: Text(snapshot.error.toString()),
                     );
+                    // debugPrintStack(label: snapshot.error.toString());
                   }
                   if (snapshot.data == null) {
                     return const Text('No Data');

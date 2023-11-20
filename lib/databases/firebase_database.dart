@@ -22,7 +22,7 @@ class FirebaseDatabase {
   Stream<QuerySnapshot> getPostsStream() {
     final postStream = FirebaseFirestore.instance
         .collection('Posts')
-        .orderBy('Timestamp', descending: true)
+        .orderBy('created_at', descending: true)
         .snapshots();
 
     return postStream;
@@ -31,8 +31,8 @@ class FirebaseDatabase {
   Stream<QuerySnapshot> getPostsByUserEmail(String userEmail){
     final postStream = FirebaseFirestore.instance
         .collection('Posts')
-        .where('UserEmail',isEqualTo: userEmail)
-        .orderBy('Timestamp', descending: true)
+        .where('poster_id',isEqualTo: userEmail)
+        .orderBy('created_at', descending: true)
         .snapshots();
 
     return postStream;

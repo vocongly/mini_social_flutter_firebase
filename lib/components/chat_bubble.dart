@@ -63,11 +63,6 @@ class _ChatBubbleState extends State<ChatBubble> {
 
   Widget _stringItem(BuildContext context) {
     bool validURL = Uri.parse(widget.data['message']).isAbsolute;
-
-    Map<String, PreviewData> datas = {};
-
-    String url = widget.data['message'];
-
     return validURL
         ? Container(
             margin: const EdgeInsets.only(top: 4),

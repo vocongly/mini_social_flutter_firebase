@@ -6,7 +6,6 @@ import 'package:flutter_mini_social/components/my_textfield.dart';
 import 'package:flutter_mini_social/components/post_item.dart';
 import 'package:flutter_mini_social/databases/firebase_database.dart';
 
-
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -37,21 +36,29 @@ class HomePage extends StatelessWidget {
       drawer: const MyDrawer(),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: MyTextField(
-                      hintText: 'Say something ...',
-                      obscureText: false,
-                      controller: postController),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/create_post');
+            },
+            child: AbsorbPointer(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: MyTextField(
+                          hintText: 'Say something ...',
+                          readyOnly: true,
+                          obscureText: false,
+                          controller: postController),
+                    ),
+                    // const SizedBox(
+                    //   width: 8,
+                    // ),
+                    // MyPostButton(onTap: postMessage)
+                  ],
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                MyPostButton(onTap: postMessage)
-              ],
+              ),
             ),
           ),
           Expanded(
@@ -73,11 +80,7 @@ class HomePage extends StatelessWidget {
                       itemCount: posts.length,
                       itemBuilder: (context, index) {
                         final post = posts[index];
-                        if(post['UserEmail'] != currentUser!.email) {
-                          return PostItem(post: post);
-                        }else{
-                          return const SizedBox.shrink();
-                        }
+                        return PostItem(post: post);
                       });
                 })),
           )

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class WaveBubble extends StatefulWidget {
@@ -18,45 +19,9 @@ class WaveBubble extends StatefulWidget {
 }
 
 class _WaveBubbleState extends State<WaveBubble> {
-  
-  late PlayerController controller;
-  late StreamSubscription<PlayerState> playerStateSubscription;
+  bool isPlaying = false;
 
-  final playerWaveStyle = const PlayerWaveStyle(
-    fixedWaveColor: Colors.white54,
-    liveWaveColor: Colors.white,
-    spacing: 6,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    controller = PlayerController();
-    _preparePlayer();
-    playerStateSubscription = controller.onPlayerStateChanged.listen((_) {
-      setState(() {});
-    });
-  }
-
-  void _preparePlayer() async {
-    controller.preparePlayer(
-      path: widget.path,
-      shouldExtractWaveform: true,
-    );
-    controller
-        .extractWaveformData(
-          path: widget.path,
-          noOfSamples: playerWaveStyle.getSamplesForWidth(100),
-        )
-        .then((waveformData) => debugPrint(waveformData.toString()));
-  }
-
-  @override
-  void dispose() {
-    playerStateSubscription.cancel();
-    controller.dispose();
-    super.dispose();
-  }
+  final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -80,31 +45,32 @@ class _WaveBubbleState extends State<WaveBubble> {
           children: [
             IconButton(
               onPressed: () async {
-                controller.playerState.isPlaying
-                    ? await controller.pausePlayer()
-                    : await controller.startPlayer(
-                        finishMode: FinishMode.loop,
-                      );
+                isPlaying ? stopAudio() : playAudio();
               },
               icon: Icon(
-                controller.playerState.isPlaying
-                    ? Icons.stop
-                    : Icons.play_arrow,
+                isPlaying ? Icons.stop : Icons.play_arrow,
               ),
               color: Colors.white,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
             ),
-            AudioFileWaveforms(
-              size: Size(MediaQuery.of(context).size.width / 2, 70),
-              playerController: controller,
-              waveformType: WaveformType.fitWidth,
-              playerWaveStyle: playerWaveStyle,
-            ),
-            if (widget.isSender) const SizedBox(width: 10),
           ],
         ),
       ),
     );
+  }
+
+  stopAudio() async {
+    await player.stop();
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  playAudio() async {
+    await player.play(UrlSource(widget.path));
+    setState(() {
+      isPlaying = !isPlaying;
+    });
   }
 }
